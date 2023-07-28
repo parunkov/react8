@@ -1,9 +1,30 @@
-// .search-wrapper {
-//     display: flex;
-//     align-items: center;
-// }
-// .buttons-wrapper {
-//     display: flex;
-//     flex-direction: column;
-
-// }
+.search-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    max-width: 500px;
+    margin: 0 auto;
+    text-align: center;
+    margin-bottom: 30px;
+}
+.input {
+    width: 100%;
+    & > div {
+        margin-bottom: 10px;
+    }
+}
+.radio {
+    padding-bottom: 10px;
+}
+.grid {
+    margin-bottom: 20px;
+}
+.user {
+    cursor: pointer;
+}
+.pagination {
+    ul {
+        justify-content: center;
+    }
+}
