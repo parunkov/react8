@@ -5,8 +5,10 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
-
-import { Button, TextField } from "@mui/material";
+import { styled } from '@mui/material/styles';
+import Paper from '@mui/material/Paper';
+import Grid from '@mui/material/Grid';
+import { Button, Container, TextField } from "@mui/material";
 import './Page.scss';
 
 const Page = () => {
@@ -28,10 +30,6 @@ const Page = () => {
         setInputValue(event.target.value);
     }
 
-    // const onRadioChange = (event) => {
-    //     console.log(event.target.value);
-    //     setSort(event.target.value);
-    // } 
     const handleChangeRadio = (event) => {
         console.log(event.target.value);
         setSort(event.target.value);   
@@ -53,9 +51,17 @@ const Page = () => {
         setUsers(dataUsers.items);
     };
 
+    const Item = styled(Paper)(({ theme }) => ({
+        backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+        ...theme.typography.body2,
+        padding: theme.spacing(1),
+        textAlign: 'center',
+        color: theme.palette.text.secondary,
+      }));
+
     return (
-        <div className="container">
-            <h1 className="title">AAAA</h1>
+        <Container maxWidth="lg"  className="container">
+            <h1 className="title">Поиск аккаунтов GitHub</h1>
             <div className="search-wrapper">
                 <TextField variant="outlined" type="text" className="input" value={inputValue} onInput={onInput} />
                 <FormControl>
@@ -71,20 +77,16 @@ const Page = () => {
                         <FormControlLabel value="desc" control={<Radio />} label="по убыванию" />
                     </RadioGroup>
                 </FormControl>
-                {/* <span>
-                    Сортировать
-                    <input type="radio" id="desc" name="sort" value="desc" onChange={onRadioChange} checked={sort === 'desc'} />
-                    <label for="desc">по возрастанию</label>
-                    <input type="radio" id="asc" name="sort" value="asc" onChange={onRadioChange} />
-                    <label for="asc">по убыванию</label>
-                </span> */}
                 <Button variant="contained" onClick={onButtonClick}>Найти</Button>
             </div>
-            {users.map((user) => (
-                <div className="user" key={user.id}>{user.login}</div>
-            ))}
+            
+            <Grid container spacing={2} columns={{ xs: 1, sm: 4, md: 12 }}>
+                {users.map((user) => (
+                    <Grid item xs={4} className="user" key={user.id}><Item>{user.login}</Item></Grid>
+                ))}
+            </Grid>
             <Pagination count={pages} variant="outlined" shape="rounded" onChange={handleChange} page={pageNumber} />
-        </div>
+        </Container>
     )
 }
 
