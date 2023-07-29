@@ -8,7 +8,7 @@ import FormLabel from '@mui/material/FormLabel';
 import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
-import { Button, Container, TextField } from "@mui/material";
+import { Button, Container, Icon, TextField } from "@mui/material";
 import './Page.scss';
 import UserInfo from "../UserInfo/UserInfo";
 
@@ -19,6 +19,7 @@ const Page = () => {
     const [pages, setPages] = useState(1);
     const [pageNumber, setPageNumber] = useState(1);
     const [userData, setUserData] = useState({});
+    const [userMode, setUserMode] = useState(false);
 
     const responseData = async (value, sortOrder, page) => {
         const url = `https://api.github.com/search/users?q=${value}&sort=repositories&order=${sortOrder}&page=${page}`;
@@ -61,6 +62,11 @@ const Page = () => {
         console.log("🚀 ~ file: Page.jsx:62 ~ onItemClick ~ repos:", repos)
         setUserData({ login, avatar, link, repos });
         console.log(userData);
+        setUserMode(true);
+    }
+
+    const onReturnClick = () => {
+        setUserMode(false);
     }
 
     const Item = styled(Paper)(({ theme }) => ({
@@ -73,12 +79,19 @@ const Page = () => {
 
     return (
         <>
-            <Container maxWidth="lg" className="container">
+            {!userMode && <Container maxWidth="lg" className="container">
                 <h1 className="title">Поиск аккаунтов GitHub</h1>
                 <div className="search-wrapper">
-                    <TextField variant="outlined" type="text" className="input" value={inputValue} onInput={onInput} />
+                    <TextField 
+                        variant="outlined" 
+                        type="text" 
+                        className="input" 
+                        value={inputValue} 
+                        onInput={onInput} 
+                        placeholder="Логин"
+                    />
                     <FormControl>
-                        <FormLabel id="radio">Сортировать</FormLabel>
+                        <FormLabel id="radio">Количество репозиториев пользователя</FormLabel>
                         <RadioGroup
                             row
                             aria-labelledby="radio"
@@ -87,8 +100,8 @@ const Page = () => {
                             onChange={handleChangeRadio}
                             className="radio"
                         >
-                            <FormControlLabel value="desc" control={<Radio />} label="по возрастанию" />
-                            <FormControlLabel value="asc" control={<Radio />} label="по убыванию" />
+                            <FormControlLabel value="desc" control={<Radio />} label="сначала большее" />
+                            <FormControlLabel value="asc" control={<Radio />} label="сначала меньшее" />
                         </RadioGroup>
                     </FormControl>
                     <Button variant="contained" onClick={onButtonClick}>Найти</Button>
@@ -106,23 +119,35 @@ const Page = () => {
                         </Grid>
                     ))}
                 </Grid>
-                <Pagination
+                {pages > 1 && <Pagination
                     count={pages}
                     variant="outlined"
                     shape="rounded"
                     onChange={handleChange}
                     page={pageNumber}
                     className="pagination"
-                />
-            </Container>
-            <Container maxWidth="lg" className="container">
-                <UserInfo 
-                    avatar={userData.avatar} 
-                    login={userData.login}
-                    repos={userData.repos}
-                    link={userData.link}
-                />
-            </Container>
+                />}
+            </Container>}
+            {userMode && <Container maxWidth="lg" className="user-page">
+                <div className="return-button-wrapper">
+                    <Button variant="contained" onClick={onReturnClick}>
+                        <Icon className="arrow">arrow_back</Icon><span className="back">К списку</span>
+                    </Button>
+                </div>
+                <div className="user-info-wrapper">
+                    <UserInfo
+                        avatar={userData.avatar}
+                        login={userData.login}
+                        repos={userData.repos}
+                        link={userData.link}
+                    />
+                </div>
+                <div className="return-button-wrapper">
+                    <Button variant="contained" onClick={onReturnClick}>
+                        <Icon className="arrow">arrow_back</Icon><span className="back">К списку</span>
+                    </Button>
+                </div>
+            </Container>}
         </>
     )
 }
