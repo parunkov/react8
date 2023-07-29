@@ -57,7 +57,7 @@ const Page = () => {
         const login = user.login;
         const link = user.html_url;
         const avatar = user.avatar_url;
-        const response = await fetch(user.repos_url);
+        const response = await fetch(`${user.repos_url}?sort=updated`);
         const repos = await response.json();
         console.log("🚀 ~ file: Page.jsx:62 ~ onItemClick ~ repos:", repos)
         setUserData({ login, avatar, link, repos });
