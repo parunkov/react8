@@ -12,9 +12,10 @@ describe('App', () => {
 		const radioElement = screen.getByDisplayValue('desc');
 		expect(radioElement).toBeChecked();
 	});
-	it('asc radio not checked', () => {
+	it('asc radio checked after click', async () => {
 		render(<App />);
 		const radioElement = screen.getByDisplayValue('asc');
-		expect(radioElement).not.toBeChecked();
+		await radioElement.click();
+		expect(radioElement).toBeChecked();
 	});
 });
